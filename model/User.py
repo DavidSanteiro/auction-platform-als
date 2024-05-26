@@ -22,9 +22,17 @@ class User(flask_login.mixins.UserMixin):
         return self.__email
     ...
 
+    @email.setter
+    def email(self, email):
+        self.__email = email
+
 #   Devuelve el identificador del usuario (flask-login)
     def get_id(self) -> str:
         return self.email
+    ...
+
+    def change_pswd(self, new_pswd):
+        self.__pswd = safe.generate_password_hash(new_pswd)
     ...
 
     def chk_pswd(self, other_pswd):

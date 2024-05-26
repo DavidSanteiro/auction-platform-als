@@ -1,0 +1,111 @@
+{% extends "skeleton_in.jinja2" %}
+
+{% block contents %}
+    <div class="container">
+        {% if bids_opened != [] %}
+            <h2>Pujas abiertas</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center align-middle">Ganas</th>
+                        <th scope="col" class="text-center align-middle">Producto</th>
+                        <th scope="col" class="text-center align-middle">Precio</th>
+                        <th scope="col" class="text-center align-middle">Tu última puja</th>
+                        <th scope="col" class="text-center align-middle">Número de pujas propias</th>
+                        <th scope="col" class="text-center align-middle">Total de pujas</th>
+                        <th scope="col" class="text-center align-middle">Ver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for bid in bids_opened %}
+                    <tr>
+                        <td class="text-center align-middle">
+                            {% if bid['main_bid'] == True %}
+                                <span class="display-4 blink_me">•</span>
+                            {% else %}
+                                <span class="display-4 fail">•</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center align-middle">{{ bid['product'].title }}</td>
+                        <td class="text-center align-middle">{{ bid['product'].price }}€</td>
+                        <td class="text-center align-middle">{{ bid['your_last_bid'].amount }}€</td>
+                        <td class="text-center align-middle">{{ bid['num_own_bids'] }}</td>
+                        <td class="text-center align-middle">{{ bid['num_bids'] }}</td>
+                        <td class="text-center align-middle">
+                            <a href="/product/{{ bid['product'].get_safe_id(srp) }}" class="btn btn-primary">
+                                <img width="24px" src="/static/view.svg" alt="Ver"/>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if bids_closed != [] %}
+            <h2>Pujas cerradas</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center align-middle">Ganaste</th>
+                        <th scope="col" class="text-center align-middle">Producto</th>
+                        <th scope="col" class="text-center align-middle">Precio</th>
+                        <th scope="col" class="text-center align-middle">Tu última puja</th>
+                        <th scope="col" class="text-center align-middle">Número de pujas propias</th>
+                        <th scope="col" class="text-center align-middle">Total de pujas</th>
+                        <th scope="col" class="text-center align-middle">Ver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for bid in bids_closed %}
+                    <tr>
+                        <td class="text-center align-middle">
+                            {% if bid['main_bid'] == True %}
+                                <span class="display-4 blink_me">•</span>
+                            {% else %}
+                                <span class="display-4 fail">•</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center align-middle">{{ bid['product'].title }}</td>
+                        <td class="text-center align-middle">{{ bid['product'].price }}€</td>
+                        <td class="text-center align-middle">{{ bid['your_last_bid'].amount }}€</td>
+                        <td class="text-center align-middle">{{ bid['num_own_bids'] }}</td>
+                        <td class="text-center align-middle">{{ bid['num_bids'] }}</td>
+                        <td class="text-center align-middle">
+                            <a href="/product/{{ bid['product'].id }}" class="btn btn-primary">
+                                <img width="24px" src="/static/view.svg" alt="Ver"/>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if no_bids == True %}
+            <div class="container my-5 d-flex justify-content-center align-items-center vh-100">
+                    <div class="empty-state text-center">
+                        <div class="icon">
+                            <img src="/static/tag_none.svg" alt="Nada que mostrar" class="w-25">
+                        </div>
+                        <p>Cuando hagas una puja, ¡aparecerá aquí!</p>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+    <style>
+        .fail {
+            color: red;
+        }
+
+        .blink_me {
+            animation: blinker 1s linear infinite;
+            color: green;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+{% endblock %}

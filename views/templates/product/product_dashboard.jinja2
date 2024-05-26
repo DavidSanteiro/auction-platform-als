@@ -1,10 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "skeleton_in.jinja2" %}
+
+{% block contents %}
+    <div class="container">
+        <a href="/product/add" class="btn btn-primary mb-3">Añadir nuevo producto</a>
+        {% if products == [] %}
+            <div class="container my-5 d-flex justify-content-center align-items-center vh-100">
+                <div class="empty-state text-center">
+                    <div class="icon">
+                        <img src="/static/tag_none.svg" alt="Nada que mostrar" class="w-25">
+                    </div>
+                    <p>No hay nada que mostrar</p>
+                </div>
+            </div>
+        {% else %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" class="text-center align-middle">Título</th>
+                    <th scope="col" class="text-center align-middle">Importe</th>
+                    <th scope="col" class="text-center align-middle">Fecha de apertura de la subasta</th>
+                    <th scope="col" class="text-center align-middle">Fecha de cierre de la subasta</th>
+                    <th scope="col" class="text-center align-middle">Ver</th>
+                    <th scope="col" class="text-center align-middle">Editar</th>
+                    <th scope="col" class="text-center align-middle">Eliminar</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td class="text-center align-middle">{{ product.title }}</td>
+                        <td class="text-center align-middle">{{ product.price }}€</td>
+                        <td class="text-center align-middle">{{ product.auction_open_date }}</td>
+                        <td class="text-center align-middle">{{ product.auction_close_date }}</td>
+                        <td class="text-center align-middle">
+                            <a href="/product/{{ product.get_safe_id(srp) }}" class="btn btn-primary">
+                                <img width="24px" src="/static/view.svg" alt="Ver"/>
+                            </a>
+                        </td>
+                        <td class="text-center align-middle">
+                            <a href="/product/{{ product.get_safe_id(srp) }}/edit" class="btn btn-secondary">
+                                <img width="24px" src="/static/edit.svg" alt="Editar"/>
+                            </a>
+                        </td>
+                        <td class="text-center align-middle">
+                            <a href="/product/{{ product.get_safe_id(srp) }}/delete" class="btn btn-danger">
+                                <img width="24px" src="/static/delete.svg" alt="Eliminar"/>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

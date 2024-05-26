@@ -1,24 +1,51 @@
-<div class="comments-section">
+<div class="comments-section" style="margin-top: 2em">
+    <h2>Comentarios</h2>
     <!-- Formulario para nuevos comentarios -->
-<h1>FORMULARIO OK</h1>
     {% if usr != None %}
-        <form action="{{ url_for('comment_blpr.add', product_id=product.get_safe_id(srp)) }}" method="POST" class="mb-3">
+        <form action="{{ url_for('comment_blpr.add', product_id=product.get_safe_id(srp)) }}" method="POST"
+              class="mb-3">
             <div class="mb-3">
                 <label for="edNewComment" class="form-label">Nuevo comentario</label>
                 <textarea class="form-control" id="edNewComment" name="edNewComment" rows="3" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="submit" class="btn btn-primary">Publicar</button>
         </form>
     {% endif %}
 
     <!-- Lista de comentarios -->
     {% for comment in comments|sort(attribute='date', reverse=true) %}
-        <div class="card mb-3">
+        <div class="card mb-3 {% if comment.email_author == product.email_owner %}bg-light{% endif %}">
             <div class="card-body">
-                <h5 class="card-title">{{ comment.email_author }}</h5>
+                <h5 class="card-title">{{ comment.author_name }}
+                    {% if comment.email_author == product.email_owner %}
+                        <span style="color: orange">(Propietario)</span>
+                    {% endif %}
+                </h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ comment.date.strftime('%d/%m/%Y %H:%M') }}</h6>
                 <p class="card-text">{{ comment.text }}</p>
+
+                <!-- Formulario de eliminación de comentarios -->
+                {% if usr.email == comment.email_author %}
+                    <form action="{{ url_for('comment_blpr.delete', comment_id=comment.get_safe_id(srp), product_id=product.get_safe_id(srp)) }}"
+                          class="comment_delete_form" method="POST" style="position: absolute; top: 0; right: 0;">
+                        <button type="submit" class="btn btn-link p-0 m-0" style="background: none; border: none;">
+                            <img src="/static/delete.svg" alt="Eliminar comentario" style="width: 20px; height: 20px;">
+                        </button>
+                    </form>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
+
+    <script>
+        // Pedir confirmación antes de enviar el formulario
+        var deleteForms = document.querySelectorAll('.comment_delete_form');
+        deleteForms.forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 </div>

@@ -2,28 +2,36 @@
 
 {% block contents %}
 
- <form action="/user/edit" method="POST" class="needs-validation" novalidate>
-    <div class="card" style="margin: 10px">
-        <div class="card-header">Registrarse</div>
-        <div class="card-body">
-            <div class="form-group">
-                <label for="edName">Nombre y apellidos</label>
-                <input type="text" class="form-control" id="edName" name="edName" required>
-                <div class="invalid-feedback">Por favor, introduce tu nombre y apellidos.</div>
-            </div>
+    <form action="/user/edit" method="POST">
+        <div class="card" style="margin: 10px">
+            <div class="card-header">Modificar datos de la cuenta</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="edName">Nombre y apellidos</label>
+                    <input type="text" class="form-control" id="edName" name="edName" value="{{ usr.name }}" required>
+                    <div class="invalid-feedback">Por favor, introduce tu nombre y apellidos.</div>
+                </div>
 
-            <div class="form-group">
-                <label for="edEmail">Email</label>
-                <input type="email" class="form-control" id="edEmail" name="edEmail" required>
-                <div class="invalid-feedback">Por favor, introduce tu email.</div>
-            </div>
+                <div class="form-group">
+                    <label for="edEmail">Email</label>
+                    <input type="email" class="form-control" id="edEmail" name="edEmail" value="{{ usr.email }}"
+                           required>
+                    <div class="invalid-feedback">Por favor, introduce tu email.</div>
+                </div>
 
-            <button type="submit" class="btn btn-primary" style="margin-top: 1em">
-                <img width="24px" src="/static/register.svg" title="register"/>
-                Guardar cambios
-            </button>
+                <button type="submit" class="btn btn-primary" style="margin-top: 1em">
+                    <img width="24px" src="/static/edit.svg" title="save"/>
+                    Guardar cambios
+                </button>
+            </div>
         </div>
+    </form>
+
+    <div style="margin: 10px">
+        ¿Buscas cambiar tu contraseña? <a href="/user/edit/password">Cambia tu contraseña aquí</a>
     </div>
-</form>
+    <div style="margin: 10px">
+        ¿Buscas eliminar tu cuenta? <a href="/user/delete">Elimina tu cuenta aquí</a>
+    </div>
 
 {% endblock %}

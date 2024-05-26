@@ -1,8 +1,8 @@
-{% extends "skeleton.jinja2" %}
+{% extends "skeleton_auth.jinja2" %}
 
 {% block contents %}
 
- <form action="/register" method="POST" class="needs-validation" novalidate>
+ <form action="/user/register" method="POST">
     <div class="card" style="margin: 10px">
         <div class="card-header">Registrarse</div>
         <div class="card-body">
@@ -31,5 +31,9 @@
         </div>
     </div>
 </form>
+
+        <div style="margin: 10px">
+        ¿Ya tienes cuenta? <a href="/user/login">Ir a login</a>
+    </div>
 
 {% endblock %}

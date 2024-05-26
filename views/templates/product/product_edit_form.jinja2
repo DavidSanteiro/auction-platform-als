@@ -1,0 +1,102 @@
+{% extends "skeleton_in.jinja2" %}
+
+{% block contents %}
+    <div class="row">
+        <div class="col-md-6">
+            <form action="{{ url_for('product_blpr.edit', product_id=product_id) }}" method="POST"
+                  enctype="multipart/form-data">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="edTitle">Título</label>
+                            <input type="text" class="form-control" id="edTitle" name="edTitle" value="{{ edTitle }}"
+                                   required>
+                            <div class="invalid-feedback">El nombre del producto.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edDescription">Descripción (soporta texto en Markdown, documentación en <a
+                                    href="https://marked.js.org/" target="_blank">Marked</a>)</label>
+                            <textarea class="form-control" id="edDescription" name="edDescription" rows="10"
+                                      required>{{ edDescription }}</textarea>
+                            <div class="invalid-feedback">Por favor, introduce la descripción del producto.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edStartPrice">Precio de inicio (€)</label>
+                            <input type="number" class="form-control" id="edStartPrice" name="edStartPrice" step="0.01"
+                                   value="{{ edStartPrice }}" required>
+                            <div class="invalid-feedback">Por favor, introduce el precio de inicio del producto.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edStartDate">Fecha de apertura</label>
+                            <input type="datetime-local" class="form-control" id="edStartDate" name="edStartDate"
+                                   value="{{ edStartDate }}" required>
+                            <div class="invalid-feedback">Por favor, introduce la fecha de apertura del producto.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edEndDate">Fecha de cierre</label>
+                            <input type="datetime-local" class="form-control" id="edEndDate" name="edEndDate"
+                                   value="{{ edEndDate }}" required>
+                            <div class="invalid-feedback">Por favor, introduce la fecha de cierre del producto.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Marca los ficheros actuales que quieras eliminar</label>
+                            <div class="d-flex flex-wrap">
+                                {% for file_name in edFiles %}
+                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2 position-relative">
+                                        <img src="{{ data_dir }}/{{ file_name }}" alt="Product Image"
+                                             class="img-thumbnail"/>
+                                        <input type="checkbox" name="delete_files" value="{{ file_name }}"
+                                               class="position-absolute" style="top: 0.5rem; right: 0.5rem;">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edPhoto">Añadir fotos del producto (png, jpg, jpeg o gif)</label>
+                            <input type="file" class="form-control" id="edPhoto" name="edFiles[]" multiple>
+                            <div class="invalid-feedback">Por favor, asegúrate de que el fichero es una imagen.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1em">
+                            <img width="24px" src="/static/edit.svg" title="Guardar cambios"/>
+                            Guardar cambios
+                        </button>
+                    </div>
+                    <div class="card-header">Datos del producto</div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Vista previa de la descripción</div>
+                <div id="preview-marked" class="card-body">
+                    Habilita javascript para visualizar la vista previa de la descripción
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Marked.js + DOMPurify #}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const textarea = document.getElementById('edDescription');
+            textarea.addEventListener('input', (e) => {
+                const markdown = e.target.value;
+                const dirtyHTML = marked.parse(markdown);
+                const cleanHTML = DOMPurify.sanitize(dirtyHTML);
+                document.getElementById('preview-marked').innerHTML = cleanHTML;
+            });
+            // Disparar el evento manualmente cuando la página se carga para eliminar el mensaje de error de JS
+            textarea.dispatchEvent(new Event('input'));
+        });
+    </script>
+
+{% endblock %}

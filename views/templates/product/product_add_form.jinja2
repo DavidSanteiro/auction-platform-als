@@ -4,8 +4,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <form action="/product/add" method="POST" class="needs-validation" novalidate
-                enctype="multipart/form-data">
+            <form action="/product/add" method="POST" enctype="multipart/form-data">
                 <div class="card">
                     <div class="card-header">Datos del producto</div>
                     <div class="card-body">
@@ -49,8 +48,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="edPhoto">Foto del producto</label>
-                            <input type="file" class="form-control-file" id="edPhoto" name="edPhoto">
+                            <label for="edPhoto">Añadir fotos del producto (png, jpg, jpeg o gif)</label>
+                            <input type="file" class="form-control" id="edPhoto" name="edFiles[]" multiple>
+                            <div class="invalid-feedback">Por favor, asegúrate de que el fichero es una imagen.</div>
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="margin-top: 1em">
@@ -73,13 +73,17 @@
         </div>
     </div>
 
+    {# Marked.js + DOMPurify #}
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            var textarea = document.getElementById('edDescription');
-            textarea.addEventListener('input', function (e) {
+            const textarea = document.getElementById('edDescription');
+            textarea.addEventListener('input', (e) => {
                 const markdown = e.target.value;
-                document.getElementById('preview-marked').innerHTML = marked.parse(markdown);
+                const dirtyHTML = marked.parse(markdown);
+                const cleanHTML = DOMPurify.sanitize(dirtyHTML);
+                document.getElementById('preview-marked').innerHTML = cleanHTML;
             });
             // Disparar el evento manualmente cuando la página se carga para eliminar el mensaje de error de JS
             textarea.dispatchEvent(new Event('input'));

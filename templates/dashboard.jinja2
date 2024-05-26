@@ -1,0 +1,39 @@
+{% extends "skeleton_in.jinja2" %}
+
+{% block contents %}
+    <div class="container">
+        <div class="row">
+            {% if products == [] %}
+                <div class="container my-5 d-flex justify-content-center align-items-center vh-100">
+                    <div class="empty-state text-center">
+                        <div class="icon">
+                            <img src="/static/tag_none.svg" alt="Nada que mostrar" class="w-25">
+                        </div>
+                        <p>No hay nada que mostrar</p>
+                    </div>
+                </div>
+            {% else %}
+                {% for product in products %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <a href="{{ url_for('product_blpr.detail', product_id=product.get_safe_id(srp)) }}"
+                           class="text-decoration-none text-dark">
+                            <div class="card">
+                                {% if product.media_file_names == [] %}
+                                    <img src="/static/no_image_available.jpg" class="card-img-top"
+                                         alt="Imagen del producto">
+                                {% else %}
+                                    <img src="{{ multimedia_data_folder + product.media_file_names[0] }}"
+                                         class="card-img-top" alt="Imagen del producto">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.price }}€</h5>
+                                    <p class="card-text">{{ product.title }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
