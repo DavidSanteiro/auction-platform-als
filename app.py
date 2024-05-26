@@ -1,6 +1,7 @@
 import flask
 import flask_login
 import sirope
+from redis import Redis
 
 from model.Product import Product
 from model.User import User
@@ -15,10 +16,11 @@ from config import load_config
 
 def create_app():
     flapp = flask.Flask(__name__)
-    sirop = sirope.Sirope()
+    config = load_config()
+    sirop = sirope.Sirope(Redis.from_url(config['REDISCLOUD_URL']))
     login = flask_login.login_manager.LoginManager()
 
-    flapp.config.update(load_config())
+    flapp.config.update(config)
     login.init_app(flapp)
 
     flapp.register_blueprint(user_blpr)
