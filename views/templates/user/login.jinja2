@@ -1,0 +1,30 @@
+{% extends "skeleton.jinja2" %}
+
+{% block contents %}
+
+ <form action="/login" method="POST" class="needs-validation" novalidate>
+    <div class="card" style="margin: 10px">
+        <div class="card-header">Iniciar sesión</div>
+        <div class="card-body">
+
+            <div class="form-group">
+                <label for="edEmail">Email</label>
+                <input type="email" class="form-control" id="edEmail" name="edEmail" required>
+                <div class="invalid-feedback">Por favor, introduce tu email.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="edPswd">Contraseña</label>
+                <input type="password" class="form-control" id="edPswd" name="edPswd" required>
+                <div class="invalid-feedback">Por favor, introduce tu contraseña.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 1em">
+                <img width="24px" src="/static/login.svg" title="inicciar sesión"/>
+                Iniciar sesión
+            </button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
