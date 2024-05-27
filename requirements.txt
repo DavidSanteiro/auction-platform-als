@@ -1,6 +1,7 @@
 flask~=3.0.2
 flask-login
 jinja2
+gunicorn
 sirope~=0.3.1
 redis
 Werkzeug~=3.0.1
