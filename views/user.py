@@ -5,7 +5,9 @@ import sirope
 import flask_login
 import bleach
 
+from redis import Redis
 from config import load_config
+
 from model.Bid import Bid
 from model.Comment import Comment
 from model.Product import Product
@@ -17,7 +19,7 @@ def get_blprint():
                                             url_prefix="/user",
                                             template_folder="templates/user",
                                             static_folder="static")
-    syrp = sirope.Sirope()
+    syrp = sirope.Sirope(Redis.from_url(load_config()['REDISCLOUD_URL']))
     return usr_module, syrp
 
 

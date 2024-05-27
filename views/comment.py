@@ -5,6 +5,9 @@ import sirope
 import flask_login
 import bleach
 
+from redis import Redis
+from config import load_config
+
 from model.Comment import Comment
 from model.User import User
 from views.product import get_product
@@ -15,7 +18,7 @@ def get_blprint():
                                         url_prefix="/comment",
                                         template_folder="templates/comment",
                                         static_folder="static/comment")
-    syrp = sirope.Sirope()
+    syrp = sirope.Sirope(Redis.from_url(load_config()['REDISCLOUD_URL']))
     return cooment_module, syrp
 
 

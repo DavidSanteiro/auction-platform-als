@@ -2,6 +2,10 @@ import flask
 import flask_login
 import sirope
 from datetime import datetime
+
+from redis import Redis
+from config import load_config
+
 from model.Bid import Bid
 from model.User import User
 
@@ -11,7 +15,7 @@ def get_blprint():
                                             url_prefix="/bid",
                                             template_folder="templates/bid",
                                             static_folder="static/bid")
-    syrp = sirope.Sirope()
+    syrp = sirope.Sirope(Redis.from_url(load_config()['REDISCLOUD_URL']))
     return bid_module, syrp
 
 

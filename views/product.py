@@ -6,6 +6,9 @@ import os
 import uuid
 import bleach
 
+from redis import Redis
+from config import load_config
+
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
@@ -21,7 +24,7 @@ def get_blprint():
                                         url_prefix="/product",
                                         template_folder="templates/product",
                                         static_folder="static/product")
-    syrp = sirope.Sirope()
+    syrp = sirope.Sirope(Redis.from_url(load_config()['REDISCLOUD_URL']))
     return product_module, syrp
 
 
