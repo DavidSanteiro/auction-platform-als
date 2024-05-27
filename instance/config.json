@@ -1,0 +1,4 @@
+{
+  "SECRET_KEY": "9a62e75cfaf84eaa872b493eead54be1",
+  "MULTIMEDIA_DATA_FOLDER": "/static/multimedia_data"
+}
